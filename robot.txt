@@ -1,0 +1,16 @@
+Motors
+====================
+PORT_A => Left motor
+PORT_B => Light sensor servo
+PORT_C => Right motor
+
+Sensors
+====================
+PORT_1 => Ultrasound
+PORT_2 => Light
+PORT_3 => Touch
+PORT_4 => Sound
+
+Info
+====================
+Max distance before touch sensor is pressed: 6
