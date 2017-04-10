@@ -63,15 +63,14 @@ Cada día de atraso en una entrega implica una multa o rebajo de la décima part
 
 ## Referencias
 
-- (http://www.philohome.com/sensors/tempsensor.htm)[http://www.philohome.com/sensors/tempsensor.htm]
-- (http://www.convict.lu/Jeunes/ultimate_stuff/Making%20your%20own%20RCX%20sensors.pdf)[http://www.convict.lu/Jeunes/ultimate_stuff/Making%20your%20own%20RCX%20sensors.pdf]
-- (http://www.dexterindustries.com/howto/lego-mindstorms-motors-with-raspberry-pi-brickpi-0-1/)[http://www.dexterindustries.com/howto/lego-mindstorms-motors-with-raspberry-pi-brickpi-0-1/]
-- (http://courses.washington.edu/engr100/Section_Wei/NXT/tricks.pdf)[http://courses.washington.edu/engr100/Section_Wei/NXT/tricks.pdf]
-- (http://www.nt.ntnu.no/users/skoge/prost/proceedings/ifac2014/media/files/1821.pdf)[http://www.nt.ntnu.no/users/skoge/prost/proceedings/ifac2014/media/files/1821.pdf]
-- (http://nebomusic.net/NXT-G-BasicLineFollow.html)[http://nebomusic.net/NXT-G-BasicLineFollow.html]
-- (http://www.coertvonk.com/family/school/lego-mindstorms-nxt-g-6107)[http://www.coertvonk.com/family/school/lego-mindstorms-nxt-g-6107]
-- (http://courses.washington.edu/engr100/Section_Wei/NXT/tricks.pdf)[http://courses.washington.edu/engr100/Section_Wei/NXT/tricks.pdf]
-- (http://www.rocwnc.org/Beginning_NXT_Programming_Workshop.pdf)[http://www.rocwnc.org/Beginning_NXT_Programming_Workshop.pdf]
-- (http://www.kirp.chtf.stuba.sk/moodle/pluginfile.php/46109/mod_resource/content/1/Lego%20Mindstorms%20NXT-G%20programming%20guide.pdf)[http://www.kirp.chtf.stuba.sk/moodle/pluginfile.php/46109/mod_resource/content/1/Lego%20Mindstorms%20NXT-G%20programming%20guide.pdf]
-- (http://www.legoengineering.com/wp-content/uploads/2013/06/download-tutorial-pdf-2.4MB.pdf)[http://www.legoengineering.com/wp-content/uploads/2013/06/download-tutorial-pdf-2.4MB.pdf]
-
+- [http://www.philohome.com/sensors/tempsensor.htm](http://www.philohome.com/sensors/tempsensor.htm)
+- [http://www.convict.lu/Jeunes/ultimate_stuff/Making%20your%20own%20RCX%20sensors.pdf](http://www.convict.lu/Jeunes/ultimate_stuff/Making%20your%20own%20RCX%20sensors.pdf)
+- [http://www.dexterindustries.com/howto/lego-mindstorms-motors-with-raspberry-pi-brickpi-0-1/](http://www.dexterindustries.com/howto/lego-mindstorms-motors-with-raspberry-pi-brickpi-0-1/)
+- [http://courses.washington.edu/engr100/Section_Wei/NXT/tricks.pdf](http://courses.washington.edu/engr100/Section_Wei/NXT/tricks.pdf)
+- [http://www.nt.ntnu.no/users/skoge/prost/proceedings/ifac2014/media/files/1821.pdf](http://www.nt.ntnu.no/users/skoge/prost/proceedings/ifac2014/media/files/1821.pdf)
+- [http://nebomusic.net/NXT-G-BasicLineFollow.html](http://nebomusic.net/NXT-G-BasicLineFollow.html)
+- [http://www.coertvonk.com/family/school/lego-mindstorms-nxt-g-6107](http://www.coertvonk.com/family/school/lego-mindstorms-nxt-g-6107)
+- [http://courses.washington.edu/engr100/Section_Wei/NXT/tricks.pdf](http://courses.washington.edu/engr100/Section_Wei/NXT/tricks.pdf)
+- [http://www.rocwnc.org/Beginning_NXT_Programming_Workshop.pdf](http://www.rocwnc.org/Beginning_NXT_Programming_Workshop.pdf)
+- [http://www.kirp.chtf.stuba.sk/moodle/pluginfile.php/46109/mod_resource/content/1/Lego%20Mindstorms%20NXT-G%20programming%20guide.pdf](http://www.kirp.chtf.stuba.sk/moodle/pluginfile.php/46109/mod_resource/content/1/Lego%20Mindstorms%20NXT-G%20programming%20guide.pdf)
+- [http://www.legoengineering.com/wp-content/uploads/2013/06/download-tutorial-pdf-2.4MB.pdf](http://www.legoengineering.com/wp-content/uploads/2013/06/download-tutorial-pdf-2.4MB.pdf)
