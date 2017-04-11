@@ -1,6 +1,6 @@
 appdirs==1.4.3
 morse==1.0
-nxt-python==2.2.2
+nxt-python==3.0
 packaging==16.8
 pyparsing==2.2.0
 six==1.10.0
