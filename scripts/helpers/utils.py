@@ -7,6 +7,6 @@ def normalize(val, _min, _max):
 
 
 def countdown(initial_time, seconds):
-    while time() - initial_time < seconds:
+    if time() - initial_time < seconds:
         return False
     return True
