@@ -1,9 +1,9 @@
 from __future__ import print_function
+from __future__ import division
 
 from nxt.sensor import *
 from nxt.motor import *
 
-import threading
 from math import pi
 from time import sleep
 from morse import string_to_morse
@@ -11,9 +11,9 @@ from morse import string_to_morse
 from .utils import countdown
 
 try:
-    import _thread
+    import threading
 except ImportError:
-    import thread as _thread
+    import dummy_threading as threading
 
 # GLOBALS
 AVAILABLE_SENSORS = [Light, Sound, Touch, Ultrasonic]
@@ -112,13 +112,16 @@ class Robot(object, metaclass=_Meta):
 
     # utils functions
     def _move(self, *args, dist=None, until=None, power=None, seconds=None, **kwargs):
-        self.running = True
         if not self.move:
             raise RobotError(
                 'Cannot move without a synchronized motor bound to self.move. Invoke "init_synchronized_motors"')
+        
+        self.running = True
 
         if power is None:
             power = self.power  # Fallback
+
+        thread = None
 
         if dist is not None:
             degrees = (dist / DISTANCE_PER_ROTATION) * 360
@@ -128,13 +131,22 @@ class Robot(object, metaclass=_Meta):
             if not callable(until):
                 raise RobotError('Parameter "until" must be a callable and must return boolean')
             else:
-                _thread.start_new_thread(self._move_until, (until, power) + args, **kwargs)
+                thread = threading.Thread(target=self._move_until, args=(until, power) + args, kwargs=kwargs)
+                thread.start()
         elif seconds is not None:
-            _thread.start_new_thread(self._move_until, (countdown, power, time.time(), seconds), {})
+            thread = threading.Thread(target=self._move_until, args=(countdown, power, time.time(), seconds), kwargs=kwargs)
+            thread.start()
         else:
-            self.move.run(self.power)
+            self.verbose('Moving forever with power=%s' % str(power))
+            self.move.run(power)
             # When this part of the code is reached we face a little problem
             # self.running is set to True and is up to the developer to reset it
+            if 'wait' in kwargs:
+                raise RobotError('The robot will run forever')
+
+        while 'wait' in kwargs and self.running:
+            self.verbose('Waiting for the robot to stop running...')
+            thread.join()
 
     def move_forward(self, *args, dist=None, until=None, seconds=None, **kwargs):
         try:
@@ -188,10 +200,18 @@ class Robot(object, metaclass=_Meta):
 
         left_power = power if degrees > 0 else power * -1
         right_power = left_power * -1
+        degrees = abs(degrees)
         self.verbose('Left power', left_power)
         self.verbose('Right power', right_power)
-        _thread.start_new_thread(self.left_motor.turn, (left_power, degrees), {})
-        _thread.start_new_thread(self.right_motor.turn, (right_power, degrees), {})
+        left_turn = threading.Thread(target=self.left_motor.turn, args=(left_power, degrees))
+        right_turn = threading.Thread(target=self.right_motor.turn, args=(right_power, degrees))
+
+        left_turn.start()
+        right_turn.start()
+
+        left_turn.join()
+        right_turn.join()
+
 
     def morse(self, message):
         # TODO: Adjust the wait and sleep values
@@ -214,7 +234,13 @@ class Robot(object, metaclass=_Meta):
 
     @property
     def running(self):
-        return self._running
+        try:
+            self.lock.acquire()
+            self.verbose('Acquired lock in Robot.running')
+            return self._running
+        finally:
+            self.lock.release()
+            self.verbose('Released lock in Robot.running')
 
     @running.setter
     def running(self, val):
@@ -223,31 +249,87 @@ class Robot(object, metaclass=_Meta):
         self.lock.release()
 
     # Calibration stuff
-    def calibrate_light(self):
+    def calibrate_light(self, interactive=False):
         if self.light is None:
             raise RobotError('No light sensor to calibrate.')
 
         self.debug('Calibrating light sensor...')
 
+        end = ' ' if interactive else '\n'
+
         sleep(.5)
-        self.debug('Please point the sensor to the white surface')
-        sleep(4)
-        self.debug('Reading white value...')
+        print('Please point the sensor to the white surface', end=end)
+        if interactive:
+            input('and press [ENTER] to read the value')
+        else:
+            sleep(4)
+        print('Reading white value...')
         white = self.light.get_lightness()
 
         sleep(.5)
-        self.debug('Please point the sensor to the black line')
-        sleep(4)
-        self.debug('Reading black value...')
+        print('Please point the sensor to the black line', end=end)
+        if interactive:
+            input('and press [ENTER] to read the value')
+        else:
+            sleep(4)
+        print('Reading black value...')
         black = self.light.get_lightness()
 
-        self.debug('Calibration finished: white=%d, black=%d' % (white, black))
-        sleep(1)
+        self.debug('Calibration values: white=%d, black=%d' % (white, black))
         return black, white
 
-    def calibrate_ultrasound(self):
-        if self.ultrasound is None:
+    def calibrate_ultrasonic(self):
+        if self.ultrasonic is None:
             raise RobotError('No ultrasound sensor to calibrate.')
+
+    def calibrate_sound(self, interactive=False):
+        if self.sound is None:
+            raise RobotError('No sound sensor to calibrate.')
+
+        print("Calibrating sound sensor...")
+        sleep(.5)
+
+        print('Please simulate a quiet environment for the next 5 seconds.')
+        if interactive:
+            input('Press [ENTER] to begin calibration for quiet environment')
+        else:
+            sleep(1)
+
+        i = time()
+        s = 5
+        quiet_values = []
+        while countdown(i, s):
+            reading = self.sound.get_sample()
+            self.verbose('[QUIET] Sound sample reading:', reading)
+            quiet_values.append(reading)
+
+        quiet = sum(quiet_values) / len(quiet_values)
+        max_quiet = max(quiet_values)
+
+        print('Quiet environment calibrated')
+        sleep(.5)
+        
+        print('Please simulate a loud environment for the next 5 seconds')
+        if interactive:
+            input('Press [ENTER] to begin calibration for loud environment')
+        else:
+            sleep(1)
+        
+        i = time()
+        s = 5
+        loud_values = []
+        while countdown(i, s):
+            reading = self.sound.get_sample()
+            self.verbose('[LOUD] Sound sample reading:', reading)
+            if reading > max_quiet:
+                loud_values.append(reading)
+
+        loud = sum(loud_values) / len(loud_values)
+
+        print('Loud environment calibrated')
+        self.debug('Calibration values: quiet=%f, loud=%f' % (quiet, loud))
+
+        return quiet, loud
 
     def set_servo(self, position):
         if position == SERVO_UP or position == SERVO_NICE:
