@@ -1,2 +1,2 @@
-from .robot import Robot
-from .utils import normalize
+from .robot import *
+from .utils import *
