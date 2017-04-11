@@ -14,3 +14,4 @@ PORT_4 => Sound
 Info
 ====================
 Max distance before touch sensor is pressed: 6
+When motors A and C are synchronized, A is always the leader
