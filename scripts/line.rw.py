@@ -1,8 +1,8 @@
 from nxt import locator
-from nxt.sensor.common import PORT_1, PORT_2, PORT_3, PORT_4
+from nxt.sensor.common import PORT_2, PORT_3
 from nxt.motor import PORT_A, PORT_B, PORT_C
-from scripts.helpers import Robot, SERVO_NICE, ON, OFF
-from scripts.helpers import normalize
+from .helpers import Robot, SERVO_NICE, ON, OFF
+from .helpers import normalize
 
 
 def main():
@@ -28,7 +28,11 @@ def main():
     lower = 4 * (10 ** -1)
     upper = 9 * (10 ** -1)
 
-    until = lambda ls=None, ts=None: normalize(ls.get_lightness(), black, white) < upper or ts.is_pressed()
+    # until = lambda *args, ls=None, ts=None, **kwargs: normalize(ls.get_lightness(), black, white) < upper or ts.is_pressed()
+
+    def until(light_sensor, touch_sensor):
+        return normalize(light_sensor.get_lightness(), black, white) < upper or touch_sensor.is_pressed()
+
     robot.move_forward(until=until, ls=light, ts=touch)
     while robot.running:
         light_level = normalize(light.get_lightness(), black, white)
