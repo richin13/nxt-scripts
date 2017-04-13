@@ -40,7 +40,7 @@ class _Meta(type):
 
         for _sensor in AVAILABLE_SENSORS:
             def func(self, port, sensor=_sensor):
-                setattr(self, sensor.__name__.lower(), namespace['_init_sensor'](port, sensor))
+                setattr(self, sensor.__name__.lower(), namespace['_init_sensor'](self, port, sensor))
                 return getattr(self, sensor.__name__.lower())
 
             setattr(cls, 'init_%s_sensor' % _sensor.__name__.lower(), func)
@@ -83,17 +83,13 @@ class Robot(object, metaclass=_Meta):
             self.left_motor = self.movement_motor.leader
             self.right_motor = self.movement_motor.follower
         else:
-            self.movement_motor = None
+            self.right_motor = kwargs.get('right_motor', None)
+            self.left_motor = kwargs.get('left_motor', None)
 
-            if 'right_motor' in kwargs:
-                self.right_motor = kwargs['right_motor']
+            if type(self.left_motor) is Motor and type(self.right_motor) is Motor:
+                self.movement_motor = SynchronizedMotors(self.left_motor, self.right_motor, 0)
             else:
-                self.right_motor = None
-
-            if 'left_motor' in kwargs:
-                self.left_motor = kwargs['left_motor']
-            else:
-                self.left_motor = None
+                self.movement_motor = None
 
         # Is there a Servo?
         self.servo = kwargs.get('servo', None)
@@ -111,7 +107,7 @@ class Robot(object, metaclass=_Meta):
         """
         self.left_motor = Motor(self.brick, port_left_motor)
         self.right_motor = Motor(self.brick, port_right_motor)
-        self.movement_motor = SynchronizedMotors(self.left_motor, self.right_motor, True)
+        self.movement_motor = SynchronizedMotors(self.left_motor, self.right_motor, 0)
         return self.move
 
     def init_servo(self, port):
