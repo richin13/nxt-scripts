@@ -42,7 +42,7 @@ def main():
                 robot.debug('Right turn didn\'t improve course. Turning left...')
                 robot.turn_left(8, 30)
 
-        robot.move_forward(until=until, ls=light, ts=touch)
+        robot.move_forward(until=until, until_args=(light, touch))
 
     # WARNING: From here, the code is even more experimental.
     # I encourage you to consider this some sort of fancy pseudo-code.
