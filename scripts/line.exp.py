@@ -28,12 +28,10 @@ def main():
     lower = 4 * (10 ** -1)
     upper = 9 * (10 ** -1)
 
-    # until = lambda *args, ls=None, ts=None, **kwargs: normalize(ls.get_lightness(), black, white) < upper or ts.is_pressed()
-
-    def until(light_sensor, touch_sensor):
+    def until(light_sensor, touch_sensor, **kwargs):
         return normalize(light_sensor.get_lightness(), black, white) < upper or touch_sensor.is_pressed()
 
-    robot.move_forward(until=until, ls=light, ts=touch)
+    robot.move_forward(until=until, until_args=(light, touch))
     while robot.running:
         light_level = normalize(light.get_lightness(), black, white)
         if light_level > lower:
@@ -51,7 +49,7 @@ def main():
     if touch.is_pressed():
         robot.debug('Found an obstacle.')
         robot.turn_right(50, 45)
-        robot.move_forward(dist=10)  # Dist is given in cm
+        robot.move_forward(dist=10, power=100)  # Dist is given in cm
 
     robot.turn_light_sensor(OFF)
 

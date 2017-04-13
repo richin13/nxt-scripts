@@ -36,7 +36,7 @@ def main():
     # until = lambda *args, ls=light, **kwargs: normalize(ls.get_lightness(), light_off, light_on) > upper
 
     # TODO I should probably lock the access to light sensor.
-    def until(light_sensor):
+    def until(light_sensor, **kwargs):  # Must explicitly state **kwargs as his argument.
         return normalize(light_sensor.get_lightness(), light_off, light_on) > upper
 
     robot.move_forward(until=until, until_args=(light,))
@@ -55,7 +55,7 @@ def main():
             robot.stop()
             robot.morse('You are too loud!')
             robot.move_backwards(seconds=3, power=25, wait=True)
-        robot.move_forward(until=until, until_args=(light,))
+        robot.move_forward(until=until, until_args=(light,))  # FIXME: Does this cause an infinite loop?
 
     robot.turn_light_sensor(OFF)
     print('DONE: Won\'t do anything else.')
