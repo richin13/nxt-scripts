@@ -299,6 +299,12 @@ class Robot(object, metaclass=_Meta):
         :param degrees: The amount of degrees to rotate. Can be negative.
         :param power: The power to use
         """
+        if self.move is None:
+            raise RobotError(
+                'Cannot move without a synchronized motor bound to self.move. '
+                'Invoke "init_synchronized_motors"'
+            )
+
         # TODO: check if this thing works
         self.debug('Turning robot by %s degrees' % str(degrees))
         if power is None:
