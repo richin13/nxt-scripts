@@ -24,12 +24,12 @@ El material entregado deberá cumplir con lo siguiente:
 		1. Desplazarse en línea recta hacia adelante tres segundos. :white_check_mark:
 		2. Desplazarse hacia atrás a la posición inicial. :white_check_mark:
 		3. Desplazarse y con el sensor de luz seguir  una línea negra pintada sobre una superficie blanca hasta encontrar un obstáculo por medio de sensor de contacto y empujarlo 10 cms en ángulo de 45 grados en relación con la dirección que el robot llevaba y detener. :warning:
-		4. Desplazarse y seguir un foco que tendrá la luz encendida; si la luz se apaga, el robot se detiene, de lo contrario la busca. Esto se hará con la luz del laboratorio apagada. Si el robot escucha un sonido (en una o varias ocasiones), emitirá una secuencia de frecuencias y dará marcha atrás tres segundos a pesar de percibir la luz o si no la percibe. Después, podrá seguir la luz otra vez. :construction:
+		4. Desplazarse y seguir un foco que tendrá la luz encendida; si la luz se apaga, el robot se detiene, de lo contrario la busca. Esto se hará con la luz del laboratorio apagada. Si el robot escucha un sonido (en una o varias ocasiones), emitirá una secuencia de frecuencias y dará marcha atrás tres segundos a pesar de percibir la luz o si no la percibe. Después, podrá seguir la luz otra vez. :warning:
 		5. Desplazarse en línea recta hacia adelante al escuchar un sonido, detectar por medio de sensor de contacto una barrera que estará en su ruta, cambiar la ruta y evadir el obstáculo para detenerse 10 cms. después de superarlo y devolverse solo a su punto de partida. :construction:
 		6. Desplazarse en línea recta hacia adelante y si encuentra el fin o borde de la mesa donde está o un abismo o precipicio, evitarlo, no caer en él. :construction:
 		7. Desplazarse, detectar por medio de sensor de ultrasonido una barrera que estará en su ruta, cambiar la ruta y evadir el obstáculo bordeándolo para  superarlo y recuperar la dirección o ruta que llevaba hasta encontrar una bola roja y detenerse ante ella. :construction:
 		8. Por medio de Bluetooth, el robot recibirá un mensaje desde un computador y lo desplegará en la pantalla del "ladrillo". :construction:
-		9. El robot podrá portar un marcador o un lápiz y dibujará un cuadrado de 10 cms. de lado. :construction:
+		9. El robot podrá portar un marcador o un lápiz y dibujará un cuadrado de 10 cms. de lado. :warning:
 		10. El robot dirá los nombres de sus creadores. :construction:
 
 ## Opcionales
