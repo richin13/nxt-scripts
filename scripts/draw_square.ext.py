@@ -16,7 +16,7 @@ def main():
 
     for _ in range(sides):
         robot.move_forward(dist=side_length)
-        robot.turn_right(power=50, degrees=(180 - angle))
+        robot.spin(degrees=(180 - angle), power=50)
 
     print('[DONE] Won\'t do anything else.')
 
