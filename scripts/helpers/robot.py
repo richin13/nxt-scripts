@@ -1,6 +1,7 @@
 from __future__ import print_function
 from __future__ import division
 
+from nxt.locator import find_one_brick
 from nxt.sensor import *
 from nxt.motor import *
 
@@ -47,15 +48,20 @@ class _Meta(type):
 
 
 class Robot(object, metaclass=_Meta):
-    def __init__(self, brick, debug=True, verbose=False, **kwargs):
+    def __init__(self, brick=None, debug=True, verbose=False, **kwargs):
         """
         Initialize a new Robot object.
-        :param brick: The brick. Use nxt.locator.find_one_brick
+        :param brick: The brick. Use nxt.locator.find_one_brick. If none brick is given,
+        an attempt to find one brick will be made.
         :param debug: Whether print debug messages or not.
         :param verbose: Whether print high verbosity messages or not
         :param kwargs:
         """
-        self.brick = brick
+        if brick is None:
+            self.brick = find_one_brick(debug=debug)
+        else:
+            self.brick = brick
+
         self.debug = print if debug else lambda *x, **y: None
         self.verbose = print if verbose else lambda *x, **y: None
         self.lock = threading.Lock()
@@ -233,7 +239,7 @@ class Robot(object, metaclass=_Meta):
 
     def _move_until(self, until, power=None, brake=False, args=(), kwargs=None):
         """
-        Warning: This function is intended to be invoked by a new thread.
+        Warning: This function is intended to be invoked by a separate thread.
 
         :param until: Callable that will define when the robot stops. It must return a boolean.
         :param args: The until callable arguments.
