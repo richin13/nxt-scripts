@@ -337,14 +337,15 @@ class Robot(object, metaclass=_Meta):
         self.debug('Playing message: %s' % message)
         as_morse = string_to_morse(message)
         self.verbose('Morse repr: %s' % str(as_morse))
-
+        freq = 1000
         for letter in as_morse:
             for m in letter:
-                if m == '-':
-                    self.brick.play_tone_and_wait(1200, .5)
+                if m == '.':
+                    self.brick.play_tone_and_wait(freq, 50)
                 else:
-                    sleep(.5)
-            sleep(.7)
+                    self.brick.play_tone_and_wait(freq, 100)
+                sleep(.2)
+            sleep(.4)
 
     # Props
     @property
