@@ -19,8 +19,8 @@ except ImportError:
 
 # GLOBALS
 AVAILABLE_SENSORS = [Light, Sound, Touch, Ultrasonic]
-WHEEL_DIAMETER = 15
-WHEEL_WIDTH = 7
+WHEEL_DIAMETER = 4
+WHEEL_WIDTH = 2
 WHEELS_DISTANCE = 45
 DISTANCE_PER_ROTATION = pi * WHEEL_DIAMETER
 SERVO_UP = 0x0F
@@ -81,7 +81,7 @@ class Robot(object, metaclass=_Meta):
             self.ultrasonic = kwargs['ultrasound']
 
         # Now check if a global power was given
-        self.power = kwargs.get('power', 50)
+        self.power = kwargs.get('power', 100)
 
         # Is there a SynchronizedMotors?
         if 'synchronized' in kwargs:
@@ -138,12 +138,16 @@ class Robot(object, metaclass=_Meta):
         wait = kwargs.get('wait', False)
         power = kwargs.get('power', self.power)
 
+        self.verbose('Setting self.running to True', end=' ')
         self.running = True
+        self.verbose('Done')
 
         self.verbose('Power is:', power)
 
         if dist is not None:
+            self.verbose('Moving a distance of %d cm' % dist)
             degrees = (dist / DISTANCE_PER_ROTATION) * 360
+            self.verbose('Degrees [%s] | Power [%s]' % (str(degrees), str(power)))
             self.move.turn(power, degrees)
             self.running = False
         elif until is not None or seconds is not None:
@@ -360,8 +364,10 @@ class Robot(object, metaclass=_Meta):
     @running.setter
     def running(self, val):
         self.lock.acquire()
-        self.running = val
+        self.verbose('Acquired lock in running property in thread', threading.get_ident())
+        self._running = val
         self.lock.release()
+        self.verbose('Released lock in running property in thread', threading.get_ident())
 
     # Calibration stuff
     def calibrate_light(self, interactive=False):
