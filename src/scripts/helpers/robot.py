@@ -430,7 +430,8 @@ class Robot(object, metaclass=_Meta):
         i = time.time()
         s = 5
         quiet_values = []
-        while countdown(i, s):
+        self.verbose('%s seconds remaining' % str(time.time() - i))
+        while not countdown(i, s):
             reading = self.sound.get_sample()
             self.verbose('[QUIET] Sound sample reading:', reading)
             quiet_values.append(reading)
@@ -450,7 +451,7 @@ class Robot(object, metaclass=_Meta):
         i = time.time()
         s = 5
         loud_values = []
-        while countdown(i, s):
+        while not countdown(i, s):
             reading = self.sound.get_sample()
             self.verbose('[LOUD] Sound sample reading:', reading)
             if reading > max_quiet:

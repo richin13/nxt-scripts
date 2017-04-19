@@ -3,8 +3,8 @@ from nxt import locator
 from nxt.sensor.common import PORT_2, PORT_4
 from nxt.motor import PORT_A, PORT_B, PORT_C
 
-from .helpers import Robot, SERVO_UP, ON, OFF
-from .helpers import normalize
+from scripts.helpers import Robot, SERVO_UP, ON, OFF
+from scripts.helpers import normalize
 
 
 def main():
@@ -24,7 +24,7 @@ def main():
     robot.turn_light_sensor(ON)
 
     # Calibration (light)
-    light_off, light_on = robot.calibrate_light()  # FIXME: Output says 'Point the sensor to black line'
+    light_off, light_on = robot.calibrate_light(interactive=True)  # FIXME: Output says 'Point the sensor to black line'
 
     # Sound sensor calibration
     quiet, loud = robot.calibrate_sound(interactive=True)
