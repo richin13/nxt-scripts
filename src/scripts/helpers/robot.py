@@ -138,17 +138,13 @@ class Robot(object, metaclass=_Meta):
         wait = kwargs.get('wait', False)
         power = kwargs.get('power', self.power)
 
-        self.verbose('Setting self.running to True', end=' ')
         self.running = True
-        self.verbose('Done')
-
-        self.verbose('Power is:', power)
 
         if dist is not None:
             self.verbose('Moving a distance of %d cm' % dist)
             degrees = (dist / DISTANCE_PER_ROTATION) * 360
             self.verbose('Degrees [%s] | Power [%s]' % (str(degrees), str(power)))
-            self.move.turn(power, degrees)
+            self._move_dist(degrees, power)
             self.running = False
         elif until is not None or seconds is not None:
             thread_kwargs = {
@@ -296,6 +292,35 @@ class Robot(object, metaclass=_Meta):
         self.stop()
         self.right_motor.turn(power, degrees)
 
+    def _move_dist(self, dist, power=None):
+        """
+        Causes the robot to rotate on its axis by turning each wheel in
+        equals but opposite directions.
+        :param dist: The amount of degrees to rotate. Can be negative.
+        :param power: The power to use
+        """
+        if self.move is None:
+            raise RobotError(
+                'Cannot move without a synchronized motor bound to self.move. '
+                'Invoke "init_synchronized_motors"'
+            )
+
+        # TODO: check if this thing works
+        self.debug('Turning robot by %s degrees' % str(dist))
+        if power is None:
+            power = self.power
+
+        power = power if dist > 0 else power * -1
+        dist = abs(dist)
+        left_turn = threading.Thread(target=self.left_motor.turn, args=(power, dist))
+        right_turn = threading.Thread(target=self.right_motor.turn, args=(power, dist))
+
+        left_turn.start()
+        right_turn.start()
+
+        left_turn.join()
+        right_turn.join()
+
     def spin(self, degrees, power=None):
         """
         Causes the robot to rotate on its axis by turning each wheel in
@@ -356,19 +381,19 @@ class Robot(object, metaclass=_Meta):
     def running(self):
         try:
             self.lock.acquire()
-            self.verbose('Acquired lock in Robot.running')
+            # self.verbose('Acquired lock in Robot.running')
             return self._running
         finally:
             self.lock.release()
-            self.verbose('Released lock in Robot.running')
+            # self.verbose('Released lock in Robot.running')
 
     @running.setter
     def running(self, val):
         self.lock.acquire()
-        self.verbose('Acquired lock in running property in thread', threading.get_ident())
+        # self.verbose('Acquired lock in running property in thread', threading.get_ident())
         self._running = val
         self.lock.release()
-        self.verbose('Released lock in running property in thread', threading.get_ident())
+        # self.verbose('Released lock in running property in thread', threading.get_ident())
 
     # Calibration stuff
     def calibrate_light(self, interactive=False):
@@ -421,14 +446,14 @@ class Robot(object, metaclass=_Meta):
         print("Calibrating sound sensor...")
         sleep(.5)
 
-        print('Please simulate a quiet environment for the next 5 seconds.')
+        print('Please simulate a quiet environment for the next 4 seconds.')
         if interactive:
             input('Press [ENTER] to begin calibration for quiet environment')
         else:
             sleep(1)
 
         i = time.time()
-        s = 5
+        s = 4
         quiet_values = []
         self.verbose('%s seconds remaining' % str(time.time() - i))
         while not countdown(i, s):
@@ -442,14 +467,14 @@ class Robot(object, metaclass=_Meta):
         print('Quiet environment calibrated')
         sleep(.5)
 
-        print('Please simulate a loud environment for the next 5 seconds')
+        print('Please simulate a loud environment for the next 4 seconds')
         if interactive:
             input('Press [ENTER] to begin calibration for loud environment')
         else:
             sleep(1)
 
         i = time.time()
-        s = 5
+        s = 4
         loud_values = []
         while not countdown(i, s):
             reading = self.sound.get_sample()
