@@ -7,12 +7,12 @@ def main():
 
     # Motors
     robot.init_synchronized_motors(PORT_A, PORT_C)
-    robot.init_servo(PORT_B)
+    # robot.init_servo(PORT_B)
 
-    robot.set_servo(SERVO_UP)
-    sides = 3  # Spoiler alert! It's a square.
+    # robot.set_servo(SERVO_UP)
+    sides = 4  # Spoiler alert! It's a square.
     side_length = 10  # In centimeters
-    angle = 30
+    angle = 90
 
     for _ in range(sides):
         print('Doing the %d side' % _)
